@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Android build output / local config
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+android/.idea/
+android/local.properties
+android/app/release/
+*.keystore
+*.jks
+
+# Capacitor copies web assets here on sync (regenerated)
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+
+# iOS build output / local config
+ios/App/build/
+ios/App/Pods/
+ios/App/Podfile.lock
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+DerivedData/
+*.xcuserstate
+xcuserdata/
+ios/.sourcemaps/
+
+# Misc
+.DS_Store
+*.log
+tools/preview/

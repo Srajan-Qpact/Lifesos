@@ -1,0 +1,46 @@
+name: iOS Build (compile check)
+
+# iOS apps can only be COMPILED on macOS, and an installable build must be
+# signed with your own Apple Developer credentials. This workflow does an
+# UNSIGNED simulator build purely to confirm the project compiles — it does
+# NOT produce an installable .ipa. To get an app onto a real iPhone, open the
+# project in Xcode on a Mac (see README) or use a paid cloud-build service.
+#
+# It is manual-only (Run workflow button) so it doesn't consume macOS minutes
+# on every push.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install JS dependencies
+        run: npm install
+
+      - name: Sync Capacitor (iOS)
+        run: npx cap sync ios
+
+      - name: Compile (iOS Simulator, no code signing)
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build
+
+      - name: Result
+        run: echo "✅ iOS project compiles. To install on a device, build & sign in Xcode (see README)."
